@@ -1,0 +1,32 @@
+version: '2'
+services:
+  #fastdfs-tracker:
+   # image: season/fastdfs:1.2
+    #network_mode:  host
+    #command: tracker
+    #volumes:
+     # - ./tracker.conf:/fdfs_conf/tracker.conf
+      #- ./client.conf:/fdfs_conf/client.conf
+      #- ./tracker_data:/fastdfs/tracker/data
+
+  fastdfs-storage:
+    image: season/fastdfs:1.2
+    network_mode: host
+    volumes:
+      - ./storage.conf:/fdfs_conf/storage.conf
+      - ./storage_data:/fastdfs/storage/data
+      - ./store_path:/fastdfs/store_path
+    environment:
+      - TRACKER_SERVER=47.99.246.57:22122
+    command: storage
+
+  fastdfs-nginx:
+    image: season/fastdfs:1.2
+    network_mode: host
+    volumes:
+       - ./nginx.conf:/etc/nginx/conf/nginx.conf
+       - ./store_path:/fastdfs/store_path
+       - ./mod_fastdfs.conf:/fdfs_conf/mod_fastdfs.conf
+    environment:
+      - TRACKER_SERVER=47.99.246.57:22122
+    command: nginx
